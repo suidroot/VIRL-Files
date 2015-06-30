@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <extensions>
+        <entry type="Boolean" key="AutoNetkit.enable_cdp">true</entry>
+        <entry type="String" key="AutoNetkit.address_family">v4</entry>
+        <entry type="String" key="AutoNetkit.ipv4_infra_subnet">10.0.0.0</entry>
+        <entry type="String" key="AutoNetkit.ipv4_infra_prefix">8</entry>
+        <entry type="String" key="AutoNetkit.ipv4_loopback_subnet">192.168.0.0</entry>
+        <entry type="Boolean" key="AutoNetkit.enable_routing">false</entry>
+    </extensions>
+    <node ipv4="192.168.0.2" location="112,119" subtype="IOSv" type="SIMPLE" name="cust1">
+        <extensions>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="config">! IOS Config generated on 2015-06-30 13:11
+! by autonetkit_0.15.1
+!
+hostname cust1
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.2 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to cloud
+  ip address 10.0.0.14 255.255.255.252
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+!
+!
+ip route 0.0.0.0 0.0.0.0 10.0.0.13
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.14" name="GigabitEthernet0/1" id="0"/>
+    </node>
+    <node ipv4="192.168.0.3" location="109,234" subtype="IOSv" type="SIMPLE" name="cust2">
+        <extensions>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="config">! IOS Config generated on 2015-06-30 13:11
+! by autonetkit_0.15.1
+!
+hostname cust2
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.2 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to cloud
+  ip address 10.0.0.18 255.255.255.252
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+!
+!
+ip route 0.0.0.0 0.0.0.0 10.0.0.17</entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.18" name="GigabitEthernet0/1" id="0"/>
+    </node>
+    <node ipv4="192.168.0.5" location="377,169" subtype="IOSv" type="SIMPLE" name="main">
+        <extensions>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="config">! IOS Config generated on 2015-06-30 13:11
+! by autonetkit_0.15.1
+!
+hostname main
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.5 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to cloud
+  ip address 10.0.0.6 255.255.255.252
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to server-1
+  ip address 10.0.0.9 255.255.255.252
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+!
+!
+ip route 0.0.0.0 0.0.0.0 10.0.0.5
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.6" name="GigabitEthernet0/1" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.9" name="GigabitEthernet0/2" id="1"/>
+    </node>
+    <node ipv4="192.168.0.4" location="256,167" subtype="IOSv" type="SIMPLE" name="cloud">
+        <extensions>
+            <entry type="string" key="config">! IOS Config generated on 2015-06-30 13:11
+! by autonetkit_0.15.1
+!
+hostname cloud
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.4 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to cust1
+  ip address 10.0.0.13 255.255.255.252
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to cust2
+  ip address 10.0.0.17 255.255.255.252
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/3
+  description to main
+  ip address 10.0.0.5 255.255.255.252
+  cdp enable
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+!
+!
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.13" name="GigabitEthernet0/1" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.17" name="GigabitEthernet0/2" id="1"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.5" name="GigabitEthernet0/3" id="2"/>
+    </node>
+    <node location="506,141" subtype="server" type="SIMPLE" name="server-1">
+        <extensions>
+            <entry type="string" key="config">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: server-1
+manage_etc_hosts: true
+runcmd:
+- start ttyS0
+- systemctl start getty@ttyS0.service
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo &quot;UseDNS no&quot; &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.15.5
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/init/ttyS0.conf
+  owner: root:root
+  content: |
+    # ttyS0 - getty
+    # This service maintains a getty on ttyS0 from the point the system is
+    # started until it is shut down again.
+    start on stopped rc or RUNLEVEL=[12345]
+    stop on runlevel [!12345]
+    respawn
+    exec /sbin/getty -L 115200 ttyS0 vt102
+  permissions: '0644'
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh -e
+    ifconfig eth1 up 10.0.0.10 netmask 255.255.255.252
+    exit 0
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.10" name="eth1" id="0"/>
+    </node>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[1]" dst="/virl:topology/virl:node[4]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[2]/virl:interface[1]" dst="/virl:topology/virl:node[4]/virl:interface[2]"/>
+    <connection src="/virl:topology/virl:node[4]/virl:interface[3]" dst="/virl:topology/virl:node[3]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[3]/virl:interface[2]" dst="/virl:topology/virl:node[5]/virl:interface[1]"/>
+</topology>
