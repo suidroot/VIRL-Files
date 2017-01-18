@@ -14,7 +14,7 @@
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="config" type="String">!
-! Last configuration change at 12:17:33 PST Tue Jan 17 2017
+! Last configuration change at 08:49:06 PST Wed Jan 18 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -88,6 +88,12 @@ domain iwan
 !
 !
 !
+crypto pki trustpoint TP-self-signed-238750749
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-238750749
+ revocation-check none
+ rsakeypair TP-self-signed-238750749
+!
 crypto pki trustpoint TP-self-signed-1013595993
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-1013595993
@@ -131,8 +137,9 @@ crypto pki trustpoint TP-self-signed-1713651336
  rsakeypair TP-self-signed-1713651336
 !
 !
-crypto pki certificate chain TP-self-signed-1013595993
+crypto pki certificate chain TP-self-signed-238750749
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-1013595993
 crypto pki certificate chain TP-self-signed-3520122768
 crypto pki certificate chain TP-self-signed-3893420233
 crypto pki certificate chain TP-self-signed-1130146097
@@ -148,7 +155,7 @@ crypto pki certificate chain TP-self-signed-1713651336
 !
 !
 !
-license udi pid CSR1000V sn 92HR5EQ0THG
+license udi pid CSR1000V sn 9DFJ102LKGE
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -452,7 +459,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="config" type="String">!
-! Last configuration change at 06:11:44 PST Tue Jan 17 2017
+! Last configuration change at 08:49:43 PST Wed Jan 18 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -532,6 +539,12 @@ domain iwan
 !
 !
 !
+crypto pki trustpoint TP-self-signed-3208738598
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3208738598
+ revocation-check none
+ rsakeypair TP-self-signed-3208738598
+!
 crypto pki trustpoint TP-self-signed-1723358372
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-1723358372
@@ -575,8 +588,9 @@ crypto pki trustpoint TP-self-signed-1743038779
  rsakeypair TP-self-signed-1743038779
 !
 !
-crypto pki certificate chain TP-self-signed-1723358372
+crypto pki certificate chain TP-self-signed-3208738598
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-1723358372
 crypto pki certificate chain TP-self-signed-2164653916
 crypto pki certificate chain TP-self-signed-4135296490
 crypto pki certificate chain TP-self-signed-3267027175
@@ -592,7 +606,7 @@ crypto pki certificate chain TP-self-signed-1743038779
 !
 !
 !
-license udi pid CSR1000V sn 9AXGA0N0FY1
+license udi pid CSR1000V sn 9H7IAGD8Z16
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -889,7 +903,7 @@ end</entry>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="config" type="String">!
-! Last configuration change at 19:23:14 UTC Tue Jan 17 2017
+! Last configuration change at 16:45:31 UTC Wed Jan 18 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1053,7 +1067,7 @@ end</entry>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="config" type="String">!
-! Last configuration change at 14:08:40 UTC Tue Jan 17 2017
+! Last configuration change at 16:45:17 UTC Wed Jan 18 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1218,7 +1232,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="config" type="String">!
-! Last configuration change at 13:24:39 PST Tue Jan 17 2017
+! Last configuration change at 08:43:04 PST Wed Jan 18 2017
 !
 version 15.6
 service timestamps debug datetime msec localtime
@@ -2288,7 +2302,7 @@ end</entry>
         <interface id="2" name="link3"/>
         <interface id="3" name="link4"/>
     </node>
-    <node name="server-1" type="SIMPLE" subtype="server" location="140,130" ipv4="10.2.0.1">
+    <node name="server-1" type="SIMPLE" subtype="server" location="119,128" ipv4="10.2.0.1">
         <extensions>
             <entry key="AutoNetkit.server_username" type="String">cisco</entry>
             <entry key="AutoNetkit.server_ssh_key" type="String">cisco</entry>
@@ -2442,9 +2456,9 @@ write_files:
     <node name="mc1" type="SIMPLE" subtype="IOSv" location="140,362" ipv4="192.168.0.100">
         <extensions>
             <entry key="config" type="String">!
-! Last configuration change at 01:45:55 UTC Mon Jun 29 2015
+! Last configuration change at 22:58:10 UTC Wed Jan 18 2017
 !
-version 15.5
+version 15.6
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
@@ -2470,7 +2484,6 @@ ethernet lmi ce
 !
 !
 !
-bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
 mmi polling-interval 60
 no mmi auto-configure
 no mmi pvc
@@ -2496,7 +2509,7 @@ domain iwan
  vrf default
   master hub
    source-interface Loopback0
-   site-prefixes prefix-list ENTERPRISE-PREFIXES
+   site-prefixes prefix-list HUB-PREFIXES
    password 7 121A0C041104
    load-balance
    enterprise-prefix  prefix-list ENTERPRISE-PREFIXES
@@ -2511,6 +2524,9 @@ domain iwan
    class CRITICAL-DATA sequence 30
     match dscp af21 policy low-latency-data
     path-preference MPLS fallback INET 
+   class DEFAULT sequence 100
+    match dscp default policy scavenger
+    path-preference INET fallback MPLS 
 !
 cts logging verbose
 !
@@ -2537,8 +2553,7 @@ interface Loopback0
  ip address 192.168.0.100 255.255.255.255
 !
 interface GigabitEthernet0/0
- no ip address
- shutdown
+ ip address 10.255.0.13 255.255.0.0
  duplex auto
  speed auto
  media-type rj45
@@ -2581,6 +2596,8 @@ no ip http secure-server
 !
 ip prefix-list ENTERPRISE-PREFIXES seq 5 permit 10.0.0.0/8
 ip prefix-list ENTERPRISE-PREFIXES seq 10 permit 172.16.1.0/24
+!
+ip prefix-list HUB-PREFIXES seq 5 permit 10.2.0.0/24
 no service-routing capabilities-manager
 !
 !
