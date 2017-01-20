@@ -13,12 +13,11 @@
         <extensions>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
-            <entry key="config" type="String">!
-! Last configuration change at 08:49:06 PST Wed Jan 18 2017
+            <entry key="config" type="String">! Last configuration change at 15:02:49 PST Thu Jan 19 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
-service timestamps log datetime msec localtime
+service timestamps log datetime msec localtime show-timezone
 no platform punt-keepalive disable-kernel-core
 platform console serial
 !
@@ -35,6 +34,7 @@ vrf definition IWAN-TRANSPORT-1
  exit-address-family
 !
 vrf definition Mgmt-intf
+ description LXC MGMT
  !
  address-family ipv4
  exit-address-family
@@ -88,6 +88,12 @@ domain iwan
 !
 !
 !
+crypto pki trustpoint TP-self-signed-334359767
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-334359767
+ revocation-check none
+ rsakeypair TP-self-signed-334359767
+!
 crypto pki trustpoint TP-self-signed-238750749
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-238750749
@@ -137,8 +143,9 @@ crypto pki trustpoint TP-self-signed-1713651336
  rsakeypair TP-self-signed-1713651336
 !
 !
-crypto pki certificate chain TP-self-signed-238750749
+crypto pki certificate chain TP-self-signed-334359767
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-238750749
 crypto pki certificate chain TP-self-signed-1013595993
 crypto pki certificate chain TP-self-signed-3520122768
 crypto pki certificate chain TP-self-signed-3893420233
@@ -155,7 +162,7 @@ crypto pki certificate chain TP-self-signed-1713651336
 !
 !
 !
-license udi pid CSR1000V sn 9DFJ102LKGE
+license udi pid CSR1000V sn 91RMX2KOH77
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -332,6 +339,7 @@ interface Tunnel10
 !
 interface GigabitEthernet1
  description OOB Management
+ vrf forwarding Mgmt-intf
  ip address 10.255.0.6 255.255.0.0
  negotiation auto
  no mop enabled
@@ -341,6 +349,7 @@ interface GigabitEthernet2
  description to hub-sw
  ip address 10.2.0.2 255.255.128.0
  standby 1 ip 10.2.0.100
+ standby 1 timers 30 255
  standby 1 priority 200
  standby 1 preempt
  negotiation auto
@@ -372,6 +381,7 @@ router eigrp as1
   exit-af-interface
   !
   af-interface GigabitEthernet2
+   hold-time 60
    no passive-interface
   exit-af-interface
   !
@@ -403,6 +413,9 @@ ip ssh source-interface Loopback0
 !
 ip prefix-list DC1-PREFIX seq 5 permit 10.1.0.0/16
 no service-routing capabilities-manager
+logging trap debugging
+logging facility local3
+logging host 10.255.0.2 vrf Mgmt-intf
 !
 !
 snmp-server community cisco RO
@@ -451,19 +464,18 @@ ntp source Loopback0
 !
 end</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet2"/>
+        <interface id="0" name="GigabitEthernet2" ipv4="10.2.0.12" netPrefixLenV4="29"/>
         <interface id="1" name="GigabitEthernet3" ipv4="10.1.0.1" netPrefixLenV4="17"/>
     </node>
     <node name="hub2-inet" type="SIMPLE" subtype="CSR1000v" location="224,304" ipv4="192.168.0.3">
         <extensions>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
-            <entry key="config" type="String">!
-! Last configuration change at 08:49:43 PST Wed Jan 18 2017
+            <entry key="config" type="String">! Last configuration change at 15:02:51 PST Thu Jan 19 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
-service timestamps log datetime msec localtime
+service timestamps log datetime msec localtime show-timezone
 no platform punt-keepalive disable-kernel-core
 platform console serial
 !
@@ -486,6 +498,7 @@ vrf definition IWAN-TRANSPORT-1
  exit-address-family
 !
 vrf definition Mgmt-intf
+ description LXC MGMT
  !
  address-family ipv4
  exit-address-family
@@ -539,6 +552,12 @@ domain iwan
 !
 !
 !
+crypto pki trustpoint TP-self-signed-2132022894
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2132022894
+ revocation-check none
+ rsakeypair TP-self-signed-2132022894
+!
 crypto pki trustpoint TP-self-signed-3208738598
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-3208738598
@@ -588,8 +607,9 @@ crypto pki trustpoint TP-self-signed-1743038779
  rsakeypair TP-self-signed-1743038779
 !
 !
-crypto pki certificate chain TP-self-signed-3208738598
+crypto pki certificate chain TP-self-signed-2132022894
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-3208738598
 crypto pki certificate chain TP-self-signed-1723358372
 crypto pki certificate chain TP-self-signed-2164653916
 crypto pki certificate chain TP-self-signed-4135296490
@@ -606,7 +626,7 @@ crypto pki certificate chain TP-self-signed-1743038779
 !
 !
 !
-license udi pid CSR1000V sn 9H7IAGD8Z16
+license udi pid CSR1000V sn 997ZVTT0X1E
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -783,6 +803,7 @@ interface Tunnel11
 !
 interface GigabitEthernet1
  description OOB Management
+ vrf forwarding Mgmt-intf
  ip address 10.255.0.7 255.255.0.0
  negotiation auto
  no mop enabled
@@ -792,6 +813,7 @@ interface GigabitEthernet2
  description to hub-sw
  ip address 10.2.0.3 255.255.128.0
  standby 1 ip 10.2.0.100
+ standby 1 timers 30 255
  negotiation auto
  no mop enabled
  no mop sysid
@@ -821,6 +843,7 @@ router eigrp as1
   exit-af-interface
   !
   af-interface GigabitEthernet2
+   hold-time 60
    no passive-interface
   exit-af-interface
   !
@@ -847,6 +870,9 @@ ip ssh source-interface Loopback0
 !
 !
 no service-routing capabilities-manager
+logging trap debugging
+logging facility local3
+logging host 10.255.0.2 vrf Mgmt-intf
 !
 !
 snmp-server community cisco RO
@@ -895,19 +921,18 @@ ntp source Loopback0
 !
 end</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet2"/>
+        <interface id="0" name="GigabitEthernet2" ipv4="10.2.0.13" netPrefixLenV4="29"/>
         <interface id="1" name="GigabitEthernet3" ipv4="10.2.128.1" netPrefixLenV4="30"/>
     </node>
     <node name="mpls" type="SIMPLE" subtype="IOSv" location="325,190" ipv4="192.168.0.21">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
-            <entry key="config" type="String">!
-! Last configuration change at 16:45:31 UTC Wed Jan 18 2017
+            <entry key="config" type="String">! Last configuration change at 17:06:15 UTC Thu Jan 19 2017
 !
 version 15.6
 service timestamps debug datetime msec
-service timestamps log datetime msec
+service timestamps log datetime msec localtime show-timezone
 no service password-encryption
 !
 hostname mpls
@@ -915,6 +940,12 @@ hostname mpls
 boot-start-marker
 boot-end-marker
 !
+!
+vrf definition Mgmt-intf
+ description LXC MGMT
+ !
+ address-family ipv4
+ exit-address-family
 !
 enable password cisco
 !
@@ -972,6 +1003,7 @@ interface Loopback0
 !
 interface GigabitEthernet0/0
  description OOB Management
+ vrf forwarding Mgmt-intf
  ip address 10.255.0.10 255.255.0.0
  duplex auto
  speed auto
@@ -1011,6 +1043,9 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
+logging trap debugging
+logging facility local3
+logging host 10.255.0.2 vrf Mgmt-intf
 !
 !
 !
@@ -1058,20 +1093,19 @@ no scheduler allocate
 end</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.1.0.2" netPrefixLenV4="17"/>
-        <interface id="1" name="GigabitEthernet0/2" ipv4="10.3.0.6" netPrefixLenV4="30"/>
-        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.6" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.128.2" netPrefixLenV4="17"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.4.0.6" netPrefixLenV4="30"/>
         <interface id="3" name="GigabitEthernet0/4" ipv4="10.1.128.2" netPrefixLenV4="17"/>
     </node>
     <node name="inet" type="SIMPLE" subtype="IOSv" location="325,301" ipv4="192.168.0.13">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
-            <entry key="config" type="String">!
-! Last configuration change at 16:45:17 UTC Wed Jan 18 2017
+            <entry key="config" type="String">! Last configuration change at 17:05:42 UTC Thu Jan 19 2017
 !
 version 15.6
 service timestamps debug datetime msec
-service timestamps log datetime msec
+service timestamps log datetime msec localtime show-timezone
 no service password-encryption
 !
 hostname inet
@@ -1079,6 +1113,12 @@ hostname inet
 boot-start-marker
 boot-end-marker
 !
+!
+vrf definition Mgmt-intf
+ description LXC MGMT
+ !
+ address-family ipv4
+ exit-address-family
 !
 enable password cisco
 !
@@ -1136,6 +1176,7 @@ interface Loopback0
 !
 interface GigabitEthernet0/0
  description OOB Management
+ vrf forwarding Mgmt-intf
  ip address 10.255.0.8 255.255.0.0
  duplex auto
  speed auto
@@ -1175,6 +1216,9 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
+logging trap debugging
+logging facility local3
+logging host 10.255.0.2 vrf Mgmt-intf
 !
 !
 !
@@ -1222,21 +1266,20 @@ no scheduler allocate
 end</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.2.128.2" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/2" ipv4="10.3.0.2" netPrefixLenV4="30"/>
-        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.2" netPrefixLenV4="30"/>
-        <interface id="3" name="GigabitEthernet0/4" ipv4="10.4.0.2" netPrefixLenV4="17"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.2" netPrefixLenV4="17"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.4.0.2" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet0/4" ipv4="10.5.0.2" netPrefixLenV4="17"/>
     </node>
     <node name="branch1-rt" type="SIMPLE" subtype="IOSv" location="469,114" ipv4="192.168.0.9">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">10</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
-            <entry key="config" type="String">!
-! Last configuration change at 08:43:04 PST Wed Jan 18 2017
+            <entry key="config" type="String">! Last configuration change at 09:07:50 PST Thu Jan 19 2017
 !
 version 15.6
 service timestamps debug datetime msec localtime
-service timestamps log datetime msec localtime
+service timestamps log datetime msec localtime show-timezone
 no service password-encryption
 !
 hostname branch1-rt
@@ -1257,6 +1300,12 @@ vrf definition IWAN-TRANSPORT-1
  address-family ipv4
  exit-address-family
 !
+vrf definition Mgmt-intf
+ description LXC MGMT
+ !
+ address-family ipv4
+ exit-address-family
+!
 enable password cisco
 !
 no aaa new-model
@@ -1264,6 +1313,7 @@ ethernet lmi ce
 !
 !
 !
+no process cpu autoprofile hog
 clock timezone PST -8 0
 clock summer-time PDT recurring
 mmi polling-interval 60
@@ -1306,6 +1356,7 @@ cts logging verbose
 !
 redundancy
 !
+no cdp run
 !
 !
 class-map match-any STREAMING-VIDEO
@@ -1454,10 +1505,12 @@ interface Tunnel11
 !
 interface GigabitEthernet0/0
  description OOB Management
+ vrf forwarding Mgmt-intf
  ip address 10.255.0.3 255.255.0.0
  duplex auto
  speed auto
  media-type rj45
+ no cdp enable
 !
 interface GigabitEthernet0/1
  description to mpls
@@ -1466,6 +1519,7 @@ interface GigabitEthernet0/1
  duplex auto
  speed auto
  media-type rj45
+ no cdp enable
  service-policy output WAN-INTERFACE-G0/1
 !
 interface GigabitEthernet0/2
@@ -1474,6 +1528,7 @@ interface GigabitEthernet0/2
  duplex auto
  speed auto
  media-type rj45
+ no cdp enable
 !
 interface GigabitEthernet0/3
  description to inet
@@ -1482,6 +1537,7 @@ interface GigabitEthernet0/3
  duplex auto
  speed auto
  media-type rj45
+ no cdp enable
  service-policy output WAN-INTERFACE-G0/3
 !
 interface GigabitEthernet0/4
@@ -1490,6 +1546,7 @@ interface GigabitEthernet0/4
  duplex auto
  speed auto
  media-type rj45
+ no cdp enable
 !
 !
 router eigrp as1
@@ -1533,6 +1590,9 @@ ip route vrf IWAN-TRANSPORT-1 0.0.0.0 0.0.0.0 10.3.0.6
 ip ssh source-interface Loopback0
 !
 no service-routing capabilities-manager
+logging trap debugging
+logging facility local3
+logging host 10.255.0.2 vrf Mgmt-intf
 !
 snmp-server community cisco RO
 snmp-server community cisco123 RW
@@ -1585,13 +1645,13 @@ ntp source Loopback0
 !
 end</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/1" ipv4="10.3.0.5" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/2" ipv4="10.3.128.1" netPrefixLenV4="30">
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.128.1" netPrefixLenV4="17"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.2.0.3" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">11</entry>
             </extensions>
         </interface>
-        <interface id="2" name="GigabitEthernet0/3" ipv4="10.3.0.1" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.1" netPrefixLenV4="17"/>
         <interface id="3" name="GigabitEthernet0/4"/>
     </node>
     <node name="branch2-rt" type="SIMPLE" subtype="IOSv" location="467,236" ipv4="192.168.0.25">
@@ -1599,8 +1659,7 @@ end</entry>
             <entry key="AutoNetkit.ASN" type="Integer">11</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
-            <entry key="config" type="String">!
-! Last configuration change at 01:42:06 UTC Mon Jun 29 2015
+            <entry key="config" type="String">! Last configuration change at 01:42:06 UTC Mon Jun 29 2015
 !
 version 15.5
 service timestamps debug datetime msec
@@ -1935,21 +1994,20 @@ no scheduler allocate
 !
 end</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.5" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/2">
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.4.0.5" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.4.128.1" netPrefixLenV4="30">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">2</entry>
             </extensions>
         </interface>
-        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.1" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.4.0.1" netPrefixLenV4="30"/>
     </node>
     <node name="branch3-rt" type="SIMPLE" subtype="IOSv" location="463,350" ipv4="192.168.0.17">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">12</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
-            <entry key="config" type="String">!
-! Last configuration change at 01:42:33 UTC Mon Jun 29 2015
+            <entry key="config" type="String">! Last configuration change at 01:42:33 UTC Mon Jun 29 2015
 !
 version 15.5
 service timestamps debug datetime msec
@@ -2286,12 +2344,12 @@ no scheduler allocate
 end</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.1.128.1" netPrefixLenV4="17"/>
-        <interface id="1" name="GigabitEthernet0/2">
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.5.128.1" netPrefixLenV4="17">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">3</entry>
             </extensions>
         </interface>
-        <interface id="2" name="GigabitEthernet0/3" ipv4="10.4.0.1" netPrefixLenV4="17"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.5.0.1" netPrefixLenV4="17"/>
     </node>
     <node name="branch1-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="564,123">
         <extensions>
@@ -2307,8 +2365,7 @@ end</entry>
             <entry key="AutoNetkit.server_username" type="String">cisco</entry>
             <entry key="AutoNetkit.server_ssh_key" type="String">cisco</entry>
             <entry key="AutoNetkit.ibgp_role" type="String">Disabled</entry>
-            <entry key="config" type="String">#cloud-config
-bootcmd:
+            <entry key="config" type="String">bootcmd:
 - ln -s -t /etc/rc.d /etc/rc.local
 hostname: server-1
 manage_etc_hosts: true
@@ -2317,7 +2374,7 @@ runcmd:
 - systemctl start getty@ttyS0.service
 - systemctl start rc-local
 - sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
-- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config
+- echo "UseDNS no" &amp;gt;&amp;gt; /etc/ssh/sshd_config
 - service ssh restart
 - service sshd restart
 users:
@@ -2370,17 +2427,15 @@ write_files:
     #!/bin/sh -e
     ifconfig eth1 up 10.2.0.1 netmask 255.255.128.0
     route add default gw 10.2.0.100
-    exit 0
-</entry>
+    exit 0</entry>
         </extensions>
-        <interface id="0" name="eth1"/>
+        <interface id="0" name="eth1" ipv4="10.2.0.9" netPrefixLenV4="29"/>
     </node>
     <node name="server-2" type="SIMPLE" subtype="server" location="661,116" ipv4="10.3.128.2">
         <extensions>
             <entry key="AutoNetkit.server_username" type="String">cisco</entry>
             <entry key="AutoNetkit.server_ssh_key" type="String">cisco</entry>
-            <entry key="config" type="String">#cloud-config
-bootcmd:
+            <entry key="config" type="String">bootcmd:
 - ln -s -t /etc/rc.d /etc/rc.local
 hostname: server-2
 manage_etc_hosts: true
@@ -2389,7 +2444,7 @@ runcmd:
 - systemctl start getty@ttyS0.service
 - systemctl start rc-local
 - sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
-- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config
+- echo "UseDNS no" &amp;gt;&amp;gt; /etc/ssh/sshd_config
 - service ssh restart
 - service sshd restart
 users:
@@ -2442,21 +2497,22 @@ write_files:
     #!/bin/sh -e
     ifconfig eth1 up 10.3.128.2 netmask 255.255.255.252
     route add default gw 10.3.128.1 
-    exit 0
-</entry>
+    exit 0</entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.3.128.2" netPrefixLenV4="30"/>
+        <interface id="0" name="eth1" ipv4="10.2.0.2" netPrefixLenV4="29"/>
     </node>
     <node name="hub-sw" type="SIMPLE" subtype="Unmanaged Switch" location="126,261">
         <interface id="0" name="link1"/>
         <interface id="1" name="link2"/>
         <interface id="2" name="link3"/>
         <interface id="3" name="link4"/>
+        <interface id="4" name="link5"/>
     </node>
     <node name="mc1" type="SIMPLE" subtype="IOSv" location="140,362" ipv4="192.168.0.100">
         <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="config" type="String">!
-! Last configuration change at 22:58:10 UTC Wed Jan 18 2017
+! Last configuration change at 21:39:13 UTC Thu Jan 19 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -2468,6 +2524,12 @@ hostname PFR-MC-1
 boot-start-marker
 boot-end-marker
 !
+!
+vrf definition Mgmt-intf
+ description LXC MGMT
+ !
+ address-family ipv4
+ exit-address-family
 !
 enable secret 5 $1$8v.Z$SFg1z4eVXUxzESs0sS3Sq0
 !
@@ -2499,6 +2561,7 @@ mmi snmp-timeout 180
 !
 !
 !
+no ip domain lookup
 ip domain name cisco.local
 ip cef
 no ipv6 cef
@@ -2515,18 +2578,18 @@ domain iwan
    enterprise-prefix  prefix-list ENTERPRISE-PREFIXES
    class VOICE sequence 10
     match dscp ef policy voice
-    path-preference MPLS fallback INET 
+    path-preference MPLS fallback INET
    class INTERACTIVE-VIDEO sequence 20
     match dscp cs4 policy real-time-video
     match dscp af41 policy real-time-video
     match dscp af42 policy real-time-video
-    path-preference MPLS fallback INET 
+    path-preference MPLS fallback INET
    class CRITICAL-DATA sequence 30
     match dscp af21 policy low-latency-data
-    path-preference MPLS fallback INET 
+    path-preference MPLS fallback INET
    class DEFAULT sequence 100
     match dscp default policy scavenger
-    path-preference INET fallback MPLS 
+    path-preference INET fallback MPLS
 !
 cts logging verbose
 !
@@ -2536,7 +2599,7 @@ username cisco privilege 15 secret 5 $1$jKPp$URBD2Yuw91wZLXSk3Wbjd1
 redundancy
 !
 !
-! 
+!
 !
 !
 !
@@ -2553,7 +2616,8 @@ interface Loopback0
  ip address 192.168.0.100 255.255.255.255
 !
 interface GigabitEthernet0/0
- ip address 10.255.0.13 255.255.0.0
+ vrf forwarding Mgmt-intf
+ ip address 10.255.0.9 255.255.0.0
  duplex auto
  speed auto
  media-type rj45
@@ -2599,6 +2663,9 @@ ip prefix-list ENTERPRISE-PREFIXES seq 10 permit 172.16.1.0/24
 !
 ip prefix-list HUB-PREFIXES seq 5 permit 10.2.0.0/24
 no service-routing capabilities-manager
+logging trap debugging
+logging facility local3
+logging host 10.255.0.2 vrf Mgmt-intf
 !
 !
 !
@@ -2606,7 +2673,7 @@ no service-routing capabilities-manager
 !
 control-plane
 !
-banner exec `
+banner exec ^C
 **************************************************************************
 * IOSv is strictly limited to use for evaluation, demonstration and IOS  *
 * education. IOSv is provided as-is and is not supported by Cisco's      *
@@ -2614,8 +2681,8 @@ banner exec `
 * of the IOSv Software or Documentation to any third party for any       *
 * purposes is expressly prohibited except as otherwise authorized by     *
 * Cisco in writing.                                                      *
-**************************************************************************`
-banner incoming `
+**************************************************************************^C
+banner incoming ^C
 **************************************************************************
 * IOSv is strictly limited to use for evaluation, demonstration and IOS  *
 * education. IOSv is provided as-is and is not supported by Cisco's      *
@@ -2623,8 +2690,8 @@ banner incoming `
 * of the IOSv Software or Documentation to any third party for any       *
 * purposes is expressly prohibited except as otherwise authorized by     *
 * Cisco in writing.                                                      *
-**************************************************************************`
-banner login `
+**************************************************************************^C
+banner login ^C
 **************************************************************************
 * IOSv is strictly limited to use for evaluation, demonstration and IOS  *
 * education. IOSv is provided as-is and is not supported by Cisco's      *
@@ -2632,24 +2699,142 @@ banner login `
 * of the IOSv Software or Documentation to any third party for any       *
 * purposes is expressly prohibited except as otherwise authorized by     *
 * Cisco in writing.                                                      *
-**************************************************************************`
+**************************************************************************^C
 !
 line con 0
 line aux 0
 line vty 0 4
- transport input none
+ transport input all
 !
 no scheduler allocate
 !
 end</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.2.0.10" netPrefixLenV4="29"/>
     </node>
     <node name="branch2-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="565,245">
         <interface id="0" name="link1"/>
     </node>
     <node name="branch3-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="571,359">
         <interface id="0" name="link1"/>
+    </node>
+    <node name="lxc-iperf-1" type="SIMPLE" subtype="lxc-iperf" location="46,259">
+        <extensions>
+            <entry key="config" type="String">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: lxc-iperf-1
+manage_etc_hosts: true
+runcmd:
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.23.9
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.2.0.11 netmask 255.255.255.248
+    route add -host 192.168.0.100 gw 10.2.0.100 dev eth1
+    route add -host 192.168.0.21 gw 10.2.0.100 dev eth1
+    route add -host 192.168.0.13 gw 10.2.0.100 dev eth1
+    route add -host 192.168.0.9 gw 10.2.0.100 dev eth1
+    route add -host 192.168.0.25 gw 10.2.0.100 dev eth1
+    route add -host 192.168.0.17 gw 10.2.0.100 dev eth1
+    route add -net 10.2.0.0/16 gw 10.2.0.100 dev eth1
+    route add -net 10.0.0.0/16 gw 10.2.0.100 dev eth1
+    route add -net 10.4.0.0/16 gw 10.2.0.100 dev eth1
+    route add -net 10.5.0.0/16 gw 10.2.0.100 dev eth1
+    route add -net 10.1.0.0/16 gw 10.2.0.100 dev eth1
+    route add -net 10.3.0.0/16 gw 10.2.0.100 dev eth1
+    route add -net 192.168.0.2/31 gw 10.2.0.100 dev eth1
+
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.2.0.11" netPrefixLenV4="29"/>
+    </node>
+    <node name="lxc-iperf-2" type="SIMPLE" subtype="lxc-iperf" location="578,43">
+        <extensions>
+            <entry key="config" type="String">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: lxc-iperf-2
+manage_etc_hosts: true
+runcmd:
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.23.9
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.3.128.20 netmask 255.255.255.248
+    route add -host 192.168.0.100 gw 10.3.128.1 dev eth1
+    route add -host 192.168.0.21 gw 10.3.128.1 dev eth1
+    route add -host 192.168.0.13 gw 10.3.128.1 dev eth1
+    route add -host 192.168.0.9 gw 10.3.128.1 dev eth1
+    route add -host 192.168.0.25 gw 10.3.128.1 dev eth1
+    route add -host 192.168.0.17 gw 10.3.128.1 dev eth1
+    route add -net 10.2.0.0/16 gw 10.3.128.1 dev eth1
+    route add -net 10.0.0.0/16 gw 10.3.128.1 dev eth1
+    route add -net 10.4.0.0/16 gw 10.3.128.1 dev eth1
+    route add -net 10.5.0.0/16 gw 10.3.128.1 dev eth1
+    route add -net 10.1.0.0/16 gw 10.3.128.1 dev eth1
+    route add -net 192.168.0.2/31 gw 10.3.128.1 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.2.0.1" netPrefixLenV4="29"/>
     </node>
     <annotations/>
     <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[2]"/>
@@ -2668,4 +2853,6 @@ end</entry>
     <connection dst="/virl:topology/virl:node[12]/virl:interface[1]" src="/virl:topology/virl:node[11]/virl:interface[3]"/>
     <connection dst="/virl:topology/virl:node[13]/virl:interface[1]" src="/virl:topology/virl:node[6]/virl:interface[2]"/>
     <connection dst="/virl:topology/virl:node[14]/virl:interface[1]" src="/virl:topology/virl:node[7]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[11]/virl:interface[5]" src="/virl:topology/virl:node[15]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[8]/virl:interface[3]" src="/virl:topology/virl:node[16]/virl:interface[1]"/>
 </topology>
