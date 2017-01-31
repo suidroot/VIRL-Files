@@ -463,6 +463,7 @@ ntp source Loopback0
 !
 !
 end</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet2" ipv4="10.2.0.12" netPrefixLenV4="29"/>
         <interface id="1" name="GigabitEthernet3" ipv4="10.1.0.1" netPrefixLenV4="17"/>
@@ -920,6 +921,7 @@ ntp source Loopback0
 !
 !
 end</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet2" ipv4="10.2.0.13" netPrefixLenV4="29"/>
         <interface id="1" name="GigabitEthernet3" ipv4="10.2.128.1" netPrefixLenV4="30"/>
@@ -1091,6 +1093,7 @@ line vty 0 4
 no scheduler allocate
 !
 end</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.1.0.2" netPrefixLenV4="17"/>
         <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.128.2" netPrefixLenV4="17"/>
@@ -1264,6 +1267,7 @@ line vty 0 4
 no scheduler allocate
 !
 end</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.2.128.2" netPrefixLenV4="30"/>
         <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.2" netPrefixLenV4="17"/>
@@ -1275,6 +1279,7 @@ end</entry>
             <entry key="AutoNetkit.ASN" type="Integer">10</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">! Last configuration change at 09:07:50 PST Thu Jan 19 2017
 !
 version 15.6
@@ -1524,7 +1529,7 @@ interface GigabitEthernet0/1
 !
 interface GigabitEthernet0/2
  description to branch1-sw1
- ip address 10.3.128.1 255.255.255.252
+ ip address 10.3.128.1 255.255.255.0
  duplex auto
  speed auto
  media-type rj45
@@ -1993,6 +1998,7 @@ line vty 0 4
 no scheduler allocate
 !
 end</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.4.0.5" netPrefixLenV4="30"/>
         <interface id="1" name="GigabitEthernet0/2" ipv4="10.4.128.1" netPrefixLenV4="30">
@@ -2342,6 +2348,7 @@ line vty 0 4
 no scheduler allocate
 !
 end</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.1.128.1" netPrefixLenV4="17"/>
         <interface id="1" name="GigabitEthernet0/2" ipv4="10.5.128.1" netPrefixLenV4="17">
@@ -2354,6 +2361,7 @@ end</entry>
     <node name="branch1-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="564,123">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">10</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="link1"/>
         <interface id="1" name="link2"/>
@@ -2365,6 +2373,7 @@ end</entry>
             <entry key="AutoNetkit.server_username" type="String">cisco</entry>
             <entry key="AutoNetkit.server_ssh_key" type="String">cisco</entry>
             <entry key="AutoNetkit.ibgp_role" type="String">Disabled</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">bootcmd:
 - ln -s -t /etc/rc.d /etc/rc.local
 hostname: server-1
@@ -2426,7 +2435,7 @@ write_files:
   content: |-
     #!/bin/sh -e
     ifconfig eth1 up 10.2.0.1 netmask 255.255.128.0
-    route add default gw 10.2.0.100
+    route add default gw 10.2.0.100 eth1
     exit 0</entry>
         </extensions>
         <interface id="0" name="eth1" ipv4="10.2.0.9" netPrefixLenV4="29"/>
@@ -2435,6 +2444,7 @@ write_files:
         <extensions>
             <entry key="AutoNetkit.server_username" type="String">cisco</entry>
             <entry key="AutoNetkit.server_ssh_key" type="String">cisco</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">bootcmd:
 - ln -s -t /etc/rc.d /etc/rc.local
 hostname: server-2
@@ -2495,13 +2505,16 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh -e
-    ifconfig eth1 up 10.3.128.2 netmask 255.255.255.252
-    route add default gw 10.3.128.1 
+    ifconfig eth1 up 10.3.128.2 netmask 255.255.255.0
+    route add default gw 10.3.128.1 eth1
     exit 0</entry>
         </extensions>
         <interface id="0" name="eth1" ipv4="10.2.0.2" netPrefixLenV4="29"/>
     </node>
     <node name="hub-sw" type="SIMPLE" subtype="Unmanaged Switch" location="126,261">
+        <extensions>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+        </extensions>
         <interface id="0" name="link1"/>
         <interface id="1" name="link2"/>
         <interface id="2" name="link3"/>
@@ -2709,16 +2722,23 @@ line vty 0 4
 no scheduler allocate
 !
 end</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.2.0.10" netPrefixLenV4="29"/>
     </node>
     <node name="branch2-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="565,245">
+        <extensions>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+        </extensions>
         <interface id="0" name="link1"/>
     </node>
     <node name="branch3-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="571,359">
+        <extensions>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+        </extensions>
         <interface id="0" name="link1"/>
     </node>
-    <node name="lxc-iperf-1" type="SIMPLE" subtype="lxc-iperf" location="46,259">
+    <node name="lxc-iperf-1" type="SIMPLE" subtype="lxc-iperf" location="46,259" ipv4="10.2.0.11">
         <extensions>
             <entry key="config" type="String">#cloud-config
 bootcmd:
@@ -2758,27 +2778,14 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.2.0.11 netmask 255.255.255.248
-    route add -host 192.168.0.100 gw 10.2.0.100 dev eth1
-    route add -host 192.168.0.21 gw 10.2.0.100 dev eth1
-    route add -host 192.168.0.13 gw 10.2.0.100 dev eth1
-    route add -host 192.168.0.9 gw 10.2.0.100 dev eth1
-    route add -host 192.168.0.25 gw 10.2.0.100 dev eth1
-    route add -host 192.168.0.17 gw 10.2.0.100 dev eth1
-    route add -net 10.2.0.0/16 gw 10.2.0.100 dev eth1
-    route add -net 10.0.0.0/16 gw 10.2.0.100 dev eth1
-    route add -net 10.4.0.0/16 gw 10.2.0.100 dev eth1
-    route add -net 10.5.0.0/16 gw 10.2.0.100 dev eth1
-    route add -net 10.1.0.0/16 gw 10.2.0.100 dev eth1
-    route add -net 10.3.0.0/16 gw 10.2.0.100 dev eth1
-    route add -net 192.168.0.2/31 gw 10.2.0.100 dev eth1
-
+    ifconfig eth1 up 10.2.0.11 netmask 255.255.128.0
+     route add default gw 10.2.0.100 eth1
     exit 0
 </entry>
         </extensions>
         <interface id="0" name="eth1" ipv4="10.2.0.11" netPrefixLenV4="29"/>
     </node>
-    <node name="lxc-iperf-2" type="SIMPLE" subtype="lxc-iperf" location="578,43">
+    <node name="lxc-iperf-2" type="SIMPLE" subtype="lxc-iperf" location="578,43" ipv4="10.3.128.20">
         <extensions>
             <entry key="config" type="String">#cloud-config
 bootcmd:
@@ -2818,19 +2825,8 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.3.128.20 netmask 255.255.255.248
-    route add -host 192.168.0.100 gw 10.3.128.1 dev eth1
-    route add -host 192.168.0.21 gw 10.3.128.1 dev eth1
-    route add -host 192.168.0.13 gw 10.3.128.1 dev eth1
-    route add -host 192.168.0.9 gw 10.3.128.1 dev eth1
-    route add -host 192.168.0.25 gw 10.3.128.1 dev eth1
-    route add -host 192.168.0.17 gw 10.3.128.1 dev eth1
-    route add -net 10.2.0.0/16 gw 10.3.128.1 dev eth1
-    route add -net 10.0.0.0/16 gw 10.3.128.1 dev eth1
-    route add -net 10.4.0.0/16 gw 10.3.128.1 dev eth1
-    route add -net 10.5.0.0/16 gw 10.3.128.1 dev eth1
-    route add -net 10.1.0.0/16 gw 10.3.128.1 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.128.1 dev eth1
+    ifconfig eth1 up 10.3.128.20 netmask 255.255.255.0
+    route add default gw 10.3.128.1 eth1
     exit 0
 </entry>
         </extensions>
