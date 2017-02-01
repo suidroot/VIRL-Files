@@ -9,7 +9,7 @@
         <entry key="AutoNetkit.ipv4_loopback_prefix" type="String">22</entry>
         <entry key="management_network" type="String">exclusive</entry>
     </extensions>
-    <node name="hub1-mpls" type="SIMPLE" subtype="CSR1000v" location="225,188" ipv4="192.168.0.2">
+    <node name="hub1-mpls" type="SIMPLE" subtype="CSR1000v" location="266,164" ipv4="192.168.0.2">
         <extensions>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
@@ -468,7 +468,7 @@ end</entry>
         <interface id="0" name="GigabitEthernet2" ipv4="10.2.0.12" netPrefixLenV4="29"/>
         <interface id="1" name="GigabitEthernet3" ipv4="10.1.0.1" netPrefixLenV4="17"/>
     </node>
-    <node name="hub2-inet" type="SIMPLE" subtype="CSR1000v" location="224,304" ipv4="192.168.0.3">
+    <node name="hub2-inet" type="SIMPLE" subtype="CSR1000v" location="265,280" ipv4="192.168.0.3">
         <extensions>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
@@ -926,7 +926,7 @@ end</entry>
         <interface id="0" name="GigabitEthernet2" ipv4="10.2.0.13" netPrefixLenV4="29"/>
         <interface id="1" name="GigabitEthernet3" ipv4="10.2.128.1" netPrefixLenV4="30"/>
     </node>
-    <node name="mpls" type="SIMPLE" subtype="IOSv" location="325,190" ipv4="192.168.0.21">
+    <node name="mpls" type="SIMPLE" subtype="IOSv" location="366,166" ipv4="192.168.0.21">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
@@ -1100,7 +1100,7 @@ end</entry>
         <interface id="2" name="GigabitEthernet0/3" ipv4="10.4.0.6" netPrefixLenV4="30"/>
         <interface id="3" name="GigabitEthernet0/4" ipv4="10.1.128.2" netPrefixLenV4="17"/>
     </node>
-    <node name="inet" type="SIMPLE" subtype="IOSv" location="325,301" ipv4="192.168.0.13">
+    <node name="inet" type="SIMPLE" subtype="IOSv" location="366,277" ipv4="192.168.0.13">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
@@ -1274,7 +1274,7 @@ end</entry>
         <interface id="2" name="GigabitEthernet0/3" ipv4="10.4.0.2" netPrefixLenV4="30"/>
         <interface id="3" name="GigabitEthernet0/4" ipv4="10.5.0.2" netPrefixLenV4="17"/>
     </node>
-    <node name="branch1-rt" type="SIMPLE" subtype="IOSv" location="469,114" ipv4="192.168.0.9">
+    <node name="branch1-rt" type="SIMPLE" subtype="IOSv" location="490,104" ipv4="192.168.0.9">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">10</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
@@ -1659,7 +1659,7 @@ end</entry>
         <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.1" netPrefixLenV4="17"/>
         <interface id="3" name="GigabitEthernet0/4"/>
     </node>
-    <node name="branch2-rt" type="SIMPLE" subtype="IOSv" location="467,236" ipv4="192.168.0.25">
+    <node name="branch2-rt" type="SIMPLE" subtype="IOSv" location="488,226" ipv4="192.168.0.25">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">11</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
@@ -2008,7 +2008,7 @@ end</entry>
         </interface>
         <interface id="2" name="GigabitEthernet0/3" ipv4="10.4.0.1" netPrefixLenV4="30"/>
     </node>
-    <node name="branch3-rt" type="SIMPLE" subtype="IOSv" location="463,350" ipv4="192.168.0.17">
+    <node name="branch3-rt" type="SIMPLE" subtype="IOSv" location="484,340" ipv4="192.168.0.17">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">12</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
@@ -2358,7 +2358,7 @@ end</entry>
         </interface>
         <interface id="2" name="GigabitEthernet0/3" ipv4="10.5.0.1" netPrefixLenV4="17"/>
     </node>
-    <node name="branch1-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="564,123">
+    <node name="branch1-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="582,101">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">10</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
@@ -2368,7 +2368,7 @@ end</entry>
         <interface id="2" name="link3"/>
         <interface id="3" name="link4"/>
     </node>
-    <node name="server-1" type="SIMPLE" subtype="server" location="119,128" ipv4="10.2.0.1">
+    <node name="server-1" type="SIMPLE" subtype="server" location="167,137" ipv4="10.2.0.1">
         <extensions>
             <entry key="AutoNetkit.server_username" type="String">cisco</entry>
             <entry key="AutoNetkit.server_ssh_key" type="String">cisco</entry>
@@ -2435,12 +2435,12 @@ write_files:
   content: |-
     #!/bin/sh -e
     ifconfig eth1 up 10.2.0.1 netmask 255.255.128.0
-    route add default gw 10.2.0.100 eth1
+    route add default gw 10.2.0.100
     exit 0</entry>
         </extensions>
         <interface id="0" name="eth1" ipv4="10.2.0.9" netPrefixLenV4="29"/>
     </node>
-    <node name="server-2" type="SIMPLE" subtype="server" location="661,116" ipv4="10.3.128.2">
+    <node name="server-2" type="SIMPLE" subtype="server" location="663,146" ipv4="10.3.128.2">
         <extensions>
             <entry key="AutoNetkit.server_username" type="String">cisco</entry>
             <entry key="AutoNetkit.server_ssh_key" type="String">cisco</entry>
@@ -2506,12 +2506,12 @@ write_files:
   content: |-
     #!/bin/sh -e
     ifconfig eth1 up 10.3.128.2 netmask 255.255.255.0
-    route add default gw 10.3.128.1 eth1
+    route add default gw 10.3.128.1
     exit 0</entry>
         </extensions>
         <interface id="0" name="eth1" ipv4="10.2.0.2" netPrefixLenV4="29"/>
     </node>
-    <node name="hub-sw" type="SIMPLE" subtype="Unmanaged Switch" location="126,261">
+    <node name="hub-sw" type="SIMPLE" subtype="Unmanaged Switch" location="165,228">
         <extensions>
             <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
@@ -2521,7 +2521,7 @@ write_files:
         <interface id="3" name="link4"/>
         <interface id="4" name="link5"/>
     </node>
-    <node name="mc1" type="SIMPLE" subtype="IOSv" location="140,362" ipv4="192.168.0.100">
+    <node name="mc1" type="SIMPLE" subtype="IOSv" location="165,287" ipv4="192.168.0.100">
         <extensions>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="config" type="String">!
@@ -2726,19 +2726,19 @@ end</entry>
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.2.0.10" netPrefixLenV4="29"/>
     </node>
-    <node name="branch2-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="565,245">
+    <node name="branch2-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="587,226">
         <extensions>
             <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="link1"/>
     </node>
-    <node name="branch3-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="571,359">
+    <node name="branch3-sw1" type="SIMPLE" subtype="Unmanaged Switch" location="587,341">
         <extensions>
             <entry key="Auto-generate config" type="Boolean">false</entry>
         </extensions>
         <interface id="0" name="link1"/>
     </node>
-    <node name="lxc-iperf-1" type="SIMPLE" subtype="lxc-iperf" location="46,259" ipv4="10.2.0.11">
+    <node name="lxc-iperf-1" type="SIMPLE" subtype="lxc-iperf" location="85,226" ipv4="10.2.0.11">
         <extensions>
             <entry key="config" type="String">#cloud-config
 bootcmd:
@@ -2785,7 +2785,7 @@ write_files:
         </extensions>
         <interface id="0" name="eth1" ipv4="10.2.0.11" netPrefixLenV4="29"/>
     </node>
-    <node name="lxc-iperf-2" type="SIMPLE" subtype="lxc-iperf" location="578,43" ipv4="10.3.128.20">
+    <node name="lxc-iperf-2" type="SIMPLE" subtype="lxc-iperf" location="664,57" ipv4="10.3.128.20">
         <extensions>
             <entry key="config" type="String">#cloud-config
 bootcmd:
@@ -2832,7 +2832,16 @@ write_files:
         </extensions>
         <interface id="0" name="eth1" ipv4="10.2.0.1" netPrefixLenV4="29"/>
     </node>
-    <annotations/>
+    <annotations>
+        <rect x="40" y="98" radius="10" width="271" height="235" fill="CCCCCC" stroke-width="3"/>
+        <rect x="442" y="26" radius="10" width="299" height="162" fill="CCCCCC" stroke-width="3"/>
+        <rect x="441" y="194" radius="10" width="299" height="78" fill="CCCCCC" stroke-width="3"/>
+        <rect x="445" y="299" radius="10" width="299" height="78" fill="CCCCCC" stroke-width="3"/>
+        <ellipse x="328" y="108" width="83" height="232" fill="CCCCCC" stroke-width="3"/>
+        <text x="327" y="345" font-size="18">The Cloud</text>
+        <text x="44" y="339" font-size="18">Hub Site</text>
+        <text x="447" y="384" font-size="18">Branches</text>
+    </annotations>
     <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[2]"/>
     <connection dst="/virl:topology/virl:node[4]/virl:interface[1]" src="/virl:topology/virl:node[2]/virl:interface[2]"/>
     <connection dst="/virl:topology/virl:node[5]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[2]"/>
