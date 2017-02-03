@@ -15,7 +15,7 @@
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 08:34:34 PST Thu Feb 2 2017
+! Last configuration change at 14:55:31 PST Fri Feb 3 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -90,6 +90,18 @@ domain iwan
 !
 !
 !
+crypto pki trustpoint TP-self-signed-2052632659
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2052632659
+ revocation-check none
+ rsakeypair TP-self-signed-2052632659
+!
+crypto pki trustpoint TP-self-signed-1839524025
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1839524025
+ revocation-check none
+ rsakeypair TP-self-signed-1839524025
+!
 crypto pki trustpoint TP-self-signed-731151633
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-731151633
@@ -157,8 +169,10 @@ crypto pki trustpoint TP-self-signed-1713651336
  rsakeypair TP-self-signed-1713651336
 !
 !
-crypto pki certificate chain TP-self-signed-731151633
+crypto pki certificate chain TP-self-signed-2052632659
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-1839524025
+crypto pki certificate chain TP-self-signed-731151633
 crypto pki certificate chain TP-self-signed-782643678
 crypto pki certificate chain TP-self-signed-334359767
 crypto pki certificate chain TP-self-signed-238750749
@@ -178,7 +192,7 @@ crypto pki certificate chain TP-self-signed-1713651336
 !
 !
 !
-license udi pid CSR1000V sn 9191JV3JTCY
+license udi pid CSR1000V sn 9KBISO2DKT3
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -351,7 +365,7 @@ interface Tunnel10
  tunnel key 101
  tunnel vrf IWAN-TRANSPORT-1
  tunnel protection ipsec profile DMVPN-PROFILE-TRANSPORT-1
- domain iwan path MPLS
+ domain iwan path MPLS path-id 1
 !
 interface GigabitEthernet1
  description OOB Management
@@ -382,35 +396,39 @@ interface GigabitEthernet3
  no mop sysid
 !
 !
-router eigrp as1
- !
- address-family ipv4 unicast autonomous-system 1
-  !
-  af-interface default
-   passive-interface
-  exit-af-interface
-  !
-  af-interface Tunnel10
-   no next-hop-self
-   no passive-interface
-   no split-horizon
-  exit-af-interface
-  !
-  af-interface GigabitEthernet2
-   hold-time 60
-   no passive-interface
-  exit-af-interface
-  !
-  topology base
-  exit-af-topology
-  network 10.2.0.0 0.0.127.255
-  network 10.6.34.0 0.0.1.255
-  network 192.168.0.2 0.0.0.0
-  eigrp router-id 192.168.0.2
- exit-address-family
-!
-!
 router eigrp IWAN-EIGRP
+!
+router ospf 1
+ redistribute connected subnets
+ redistribute bgp 10 subnets route-map REDIST-BGP-TO-OSPF
+ passive-interface default
+ no passive-interface GigabitEthernet2
+ network 10.0.0.0 0.255.255.255 area 0
+!
+router bgp 10
+ bgp router-id 192.168.0.2
+ bgp log-neighbor-changes
+ bgp listen range 10.6.34.0/24 peer-group MPLS-SPOKES
+ neighbor MPLS-SPOKES peer-group
+ neighbor MPLS-SPOKES remote-as 10
+ neighbor MPLS-SPOKES timers 20 60
+ !
+ address-family ipv4
+  bgp redistribute-internal
+  network 10.2.0.0 mask 255.255.128.0
+  network 10.6.34.0 mask 255.255.254.0
+  network 192.168.0.2 mask 255.255.255.255
+  network 192.168.0.100 mask 255.255.255.255
+  redistribute connected route-map REDIST-CONNECTED-TO-BGP
+  neighbor MPLS-SPOKES activate
+  neighbor MPLS-SPOKES send-community
+  neighbor MPLS-SPOKES route-reflector-client
+  neighbor MPLS-SPOKES next-hop-self all
+  neighbor MPLS-SPOKES weight 50000
+  neighbor MPLS-SPOKES soft-reconfiguration inbound
+  neighbor MPLS-SPOKES route-map BGP-MPLS-SPOKES-OUT out
+  distance bgp 201 19 250
+ exit-address-family
 !
 !
 virtual-service csr_mgmt
@@ -433,6 +451,22 @@ logging trap debugging
 logging facility local3
 logging host 10.255.0.2 vrf Mgmt-intf
 !
+!
+route-map REDIST-CONNECTED-TO-BGP deny 10
+ description Block redistribution of DMVPN Tunnel Interfaces
+ match interface Tunnel10
+!
+route-map REDIST-CONNECTED-TO-BGP permit 20
+ description Redistribute all other prefixes
+!
+route-map BGP-MPLS-SPOKES-OUT permit 10
+ description First Priority MPLS via R11
+ set local-preference 100000
+!
+route-map REDIST-BGP-TO-OSPF permit 10
+ description Modify Metric to Prefer MPLS over Internet
+ set metric 1000
+ set metric-type type-1
 !
 snmp-server community cisco RO
 snmp-server community cisco123 RW
@@ -489,7 +523,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 08:34:33 PST Thu Feb 2 2017
+! Last configuration change at 14:55:38 PST Fri Feb 3 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -570,6 +604,18 @@ domain iwan
 !
 !
 !
+crypto pki trustpoint TP-self-signed-3198320583
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3198320583
+ revocation-check none
+ rsakeypair TP-self-signed-3198320583
+!
+crypto pki trustpoint TP-self-signed-1372993907
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1372993907
+ revocation-check none
+ rsakeypair TP-self-signed-1372993907
+!
 crypto pki trustpoint TP-self-signed-3715352579
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-3715352579
@@ -637,8 +683,10 @@ crypto pki trustpoint TP-self-signed-1743038779
  rsakeypair TP-self-signed-1743038779
 !
 !
-crypto pki certificate chain TP-self-signed-3715352579
+crypto pki certificate chain TP-self-signed-3198320583
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-1372993907
+crypto pki certificate chain TP-self-signed-3715352579
 crypto pki certificate chain TP-self-signed-3392682215
 crypto pki certificate chain TP-self-signed-2132022894
 crypto pki certificate chain TP-self-signed-3208738598
@@ -658,7 +706,7 @@ crypto pki certificate chain TP-self-signed-1743038779
 !
 !
 !
-license udi pid CSR1000V sn 9NSEM6CP92M
+license udi pid CSR1000V sn 9U452UTLHML
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -831,7 +879,7 @@ interface Tunnel11
  tunnel key 102
  tunnel vrf IWAN-PUBLIC
  tunnel protection ipsec profile DMVPN-PROFILE-PUBLIC
- domain iwan path INET
+ domain iwan path INET path-id 2
 !
 interface GigabitEthernet1
  description OOB Management
@@ -859,32 +907,36 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
+router ospf 1
+ redistribute connected subnets
+ redistribute bgp 10 subnets route-map REDIST-BGP-TO-OSPF
+ passive-interface default
+ no passive-interface GigabitEthernet2
+ network 10.0.0.0 0.255.255.255 area 0
 !
-router eigrp as1
+router bgp 10
+ bgp router-id 192.168.0.3
+ bgp log-neighbor-changes
+ bgp listen range 10.6.36.0/24 peer-group INET-SPOKES
+ neighbor INET-SPOKES peer-group
+ neighbor INET-SPOKES remote-as 10
+ neighbor INET-SPOKES timers 20 60
  !
- address-family ipv4 unicast autonomous-system 1
-  !
-  af-interface default
-   passive-interface
-  exit-af-interface
-  !
-  af-interface Tunnel11
-   no next-hop-self
-   no passive-interface
-   no split-horizon
-  exit-af-interface
-  !
-  af-interface GigabitEthernet2
-   hold-time 60
-   no passive-interface
-  exit-af-interface
-  !
-  topology base
-  exit-af-topology
-  network 10.2.0.0 0.0.127.255
-  network 10.6.36.0 0.0.1.255
-  network 192.168.0.3 0.0.0.0
-  eigrp router-id 192.168.0.3
+ address-family ipv4
+  bgp redistribute-internal
+  network 10.2.0.0 mask 255.255.128.0
+  network 10.6.36.0 mask 255.255.254.0
+  network 192.168.0.3 mask 255.255.255.255
+  network 192.168.0.100 mask 255.255.255.255
+  redistribute connected route-map REDIST-CONNECTED-TO-BGP
+  neighbor INET-SPOKES activate
+  neighbor INET-SPOKES send-community
+  neighbor INET-SPOKES route-reflector-client
+  neighbor INET-SPOKES next-hop-self all
+  neighbor INET-SPOKES weight 50000
+  neighbor INET-SPOKES soft-reconfiguration inbound
+  neighbor INET-SPOKES route-map BGP-INET-SPOKES-OUT out
+  distance bgp 201 19 250
  exit-address-family
 !
 !
@@ -906,6 +958,23 @@ logging trap debugging
 logging facility local3
 logging host 10.255.0.2 vrf Mgmt-intf
 !
+!
+route-map REDIST-CONNECTED-TO-BGP deny 10
+ description Block redistribution of DMVPN Tunnel Interfaces
+ match interface Tunnel11
+!
+route-map REDIST-CONNECTED-TO-BGP permit 20
+ description Redistribute all other prefixes
+!
+route-map BGP-INET-SPOKES-OUT permit 10
+ description Third Priority INET via R12
+ description Second Priority INET via R12
+ set local-preference 20000
+!
+route-map REDIST-BGP-TO-OSPF permit 10
+ description Modify Metric to Prefer MPLS over Internet
+ set metric 2000
+ set metric-type type-1
 !
 snmp-server community cisco RO
 snmp-server community cisco123 RW
@@ -962,7 +1031,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 16:30:13 UTC Thu Feb 2 2017
+! Last configuration change at 21:19:20 UTC Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1137,7 +1206,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 16:30:01 UTC Thu Feb 2 2017
+! Last configuration change at 21:18:55 UTC Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1313,7 +1382,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 14:31:08 PST Thu Feb 2 2017
+! Last configuration change at 13:38:47 PST Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec localtime
@@ -1588,35 +1657,34 @@ interface GigabitEthernet0/4
  media-type rj45
  no cdp enable
 !
-!
-router eigrp as1
+router bgp 10
+ bgp router-id 192.168.0.9
+ bgp log-neighbor-changes
+ neighbor MPLS-HUB peer-group
+ neighbor MPLS-HUB remote-as 10
+ neighbor MPLS-HUB timers 20 60
+ neighbor INET-HUB peer-group
+ neighbor INET-HUB remote-as 10
+ neighbor INET-HUB timers 20 60
+ neighbor 10.6.34.1 peer-group MPLS-HUB
+ neighbor 10.6.36.1 peer-group INET-HUB
  !
- address-family ipv4 unicast autonomous-system 1
-  !
-  af-interface default
-   passive-interface
-  exit-af-interface
-  !
-  af-interface Tunnel10
-   no next-hop-self
-   no passive-interface
-   no split-horizon
-  exit-af-interface
-  !
-  af-interface Tunnel11
-   no next-hop-self
-   no passive-interface
-   no split-horizon
-  exit-af-interface
-  !
-  topology base
-  exit-af-topology
-  network 10.3.128.1 0.0.0.0
-  network 10.6.34.0 0.0.1.255
-  network 10.6.36.0 0.0.1.255
-  network 192.168.0.9 0.0.0.0
-  eigrp router-id 192.168.0.9
-  eigrp stub connected summary redistributed
+ address-family ipv4
+  bgp redistribute-internal
+  network 10.3.128.0 mask 255.255.255.0
+  network 192.168.0.9 mask 255.255.255.255
+  redistribute ospf 1
+  neighbor MPLS-HUB send-community
+  neighbor MPLS-HUB next-hop-self all
+  neighbor MPLS-HUB weight 50000
+  neighbor MPLS-HUB soft-reconfiguration inbound
+  neighbor INET-HUB send-community
+  neighbor INET-HUB next-hop-self all
+  neighbor INET-HUB weight 50000
+  neighbor INET-HUB soft-reconfiguration inbound
+  neighbor 10.6.34.1 activate
+  neighbor 10.6.36.1 activate
+  distance bgp 201 19 250
  exit-address-family
 !
 ip forward-protocol nd
@@ -1631,6 +1699,7 @@ ip ssh source-interface Loopback0
 !
 !
 ip prefix-list SITE-PREFIX seq 5 permit 10.3.128.0/24
+ip prefix-list SITE-PREFIX seq 10 permit 192.168.0.9/32
 no service-routing capabilities-manager
 logging trap debugging
 logging facility local3
@@ -1703,7 +1772,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 22:46:40 UTC Thu Feb 2 2017
+! Last configuration change at 22:51:08 UTC Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1938,29 +2007,30 @@ interface GigabitEthernet0/3
  speed auto
  media-type rj45
 !
+router ospf 1
+ redistribute bgp 10 subnets route-map REDIST-BGP-TO-OSPF
+ passive-interface default
+ no passive-interface GigabitEthernet0/2
+ network 10.0.0.0 0.255.255.255 area 0
+ network 192.168.0.25 0.0.0.0 area 0
+ default-information originate
 !
-router eigrp as1
+router bgp 10
+ bgp router-id 192.168.0.25
+ bgp log-neighbor-changes
+ neighbor MPLS-HUB peer-group
+ neighbor MPLS-HUB remote-as 10
+ neighbor MPLS-HUB timers 20 60
+ neighbor 10.6.34.1 peer-group MPLS-HUB
  !
- address-family ipv4 unicast autonomous-system 1
-  !
-  af-interface default
-   passive-interface
-  exit-af-interface
-  !
-  af-interface Tunnel10
-   no next-hop-self
-   no passive-interface
-   no split-horizon
-  exit-af-interface
-  !
-  topology base
-  exit-af-topology
-  network 10.0.128.0 0.0.0.255
-  network 10.6.34.0 0.0.1.255
-  network 10.6.36.0 0.0.1.255
-  network 192.168.0.25 0.0.0.0
-  eigrp router-id 192.168.0.25
-  eigrp stub connected summary redistributed
+ address-family ipv4
+  bgp redistribute-internal
+  redistribute ospf 1 route-map REDIST-OSPF-TO-BGP
+  neighbor MPLS-HUB send-community
+  neighbor MPLS-HUB next-hop-self all
+  neighbor MPLS-HUB weight 50000
+  neighbor MPLS-HUB soft-reconfiguration inbound
+  neighbor 10.6.34.1 activate
  exit-address-family
 !
 ip forward-protocol nd
@@ -1973,7 +2043,23 @@ ip route vrf IWAN-TRANSPORT-1 0.0.0.0 0.0.0.0 10.0.0.6
 !
 !
 ip prefix-list SITE-PREFIX seq 5 permit 10.0.128.0/24
+ip prefix-list SITE-PREFIX seq 10 permit 192.168.0.25/32
+ip prefix-list SITE-PREFIX seq 15 permit 192.168.0.17/32
 no service-routing capabilities-manager
+!
+route-map REDIST-BGP-TO-OSPF permit 10
+ description Set a route tag to identify routes redistributed from BGP
+ set tag 1
+!
+route-map REDIST-OSPF-TO-BGP deny 10
+ description Block all routes redistributed from BGP
+ match tag 1
+!
+route-map REDIST-OSPF-TO-BGP permit 20
+ description Redistribute all other traffic
+ match route-type internal
+ match route-type external type-1
+ match route-type external type-2
 !
 !
 !
@@ -2035,7 +2121,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 23:20:00 UTC Thu Feb 2 2017
+! Last configuration change at 22:51:57 UTC Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -2265,29 +2351,31 @@ interface GigabitEthernet0/3
  media-type rj45
  service-policy output WAN-INTERFACE-G0/3
 !
+router ospf 1
+ redistribute bgp 10 subnets route-map REDIST-BGP-TO-OSPF
+ passive-interface default
+ no passive-interface GigabitEthernet0/2
+ network 10.0.0.0 0.255.255.255 area 0
+ network 192.168.0.17 0.0.0.0 area 0
+ default-information originate
 !
-router eigrp as1
+router bgp 10
+ bgp router-id 192.168.0.17
+ bgp log-neighbor-changes
+ neighbor INET-HUB peer-group
+ neighbor INET-HUB remote-as 10
+ neighbor INET-HUB timers 20 60
+ neighbor 10.6.36.1 peer-group INET-HUB
  !
- address-family ipv4 unicast autonomous-system 1
-  !
-  af-interface default
-   passive-interface
-  exit-af-interface
-  !
-  af-interface Tunnel11
-   no next-hop-self
-   no passive-interface
-   no split-horizon
-  exit-af-interface
-  !
-  topology base
-  exit-af-topology
-  network 10.0.128.0 0.0.0.255
-  network 10.6.34.0 0.0.1.255
-  network 10.6.36.0 0.0.1.255
-  network 192.168.0.17 0.0.0.0
-  eigrp router-id 192.168.0.17
-  eigrp stub connected summary redistributed
+ address-family ipv4
+  bgp redistribute-internal
+  redistribute ospf 1 route-map REDIST-OSPF-TO-BGP
+  neighbor INET-HUB send-community
+  neighbor INET-HUB next-hop-self all
+  neighbor INET-HUB weight 50000
+  neighbor INET-HUB soft-reconfiguration inbound
+  neighbor 10.6.36.1 activate
+  distance bgp 201 19 250
  exit-address-family
 !
 ip forward-protocol nd
@@ -2300,6 +2388,20 @@ ip route vrf IWAN-TRANSPORT-1 0.0.0.0 0.0.0.0 10.1.128.2
 ip ssh source-interface Loopback0
 !
 no service-routing capabilities-manager
+!
+route-map REDIST-BGP-TO-OSPF permit 10
+ description Set a route tag to identify routes redistributed from BGP
+ set tag 1
+!
+route-map REDIST-OSPF-TO-BGP deny 10
+ description Block all routes redistributed from BGP
+ match tag 1
+!
+route-map REDIST-OSPF-TO-BGP permit 20
+ description Redistribute all other traffic
+ match route-type internal
+ match route-type external type-1
+ match route-type external type-2
 !
 !
 !
@@ -2451,7 +2553,7 @@ write_files:
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 22:33:06 UTC Thu Feb 2 2017
+! Last configuration change at 22:37:28 UTC Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -2555,32 +2657,16 @@ interface GigabitEthernet0/0
 !
 interface GigabitEthernet0/1
  description hub-sw1
- ip address 10.2.0.4 255.255.255.0
+ ip address 10.2.0.4 255.255.128.0
  duplex auto
  speed auto
  media-type rj45
 !
-!
-router eigrp IWAN-EIGRP
- !
- address-family ipv4 unicast autonomous-system 1
-  !
-  af-interface default
-   passive-interface
-  exit-af-interface
-  !
-  af-interface GigabitEthernet0/1
-   no passive-interface
-  exit-af-interface
-  !
-  topology base
-  exit-af-topology
-  network 10.0.0.0
-  network 10.6.0.0 0.1.255.255
-  network 192.168.0.9 0.0.0.0
-  network 192.168.0.100 0.0.0.0
-  eigrp router-id 10.6.32.251
- exit-address-family
+router ospf 1
+ router-id 192.168.0.100
+ redistribute connected subnets
+ network 10.2.0.0 0.0.0.255 area 0
+ network 192.168.0.100 0.0.0.0 area 0
 !
 ip forward-protocol nd
 !
@@ -2591,6 +2677,7 @@ no ip http secure-server
 !
 ip prefix-list ENTERPRISE-PREFIXES seq 5 permit 10.0.0.0/8
 ip prefix-list ENTERPRISE-PREFIXES seq 10 permit 172.16.1.0/24
+ip prefix-list ENTERPRISE-PREFIXES seq 15 permit 192.168.0.0/16
 !
 ip prefix-list HUB-PREFIXES seq 5 permit 10.2.0.0/24
 no service-routing capabilities-manager

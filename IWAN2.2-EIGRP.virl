@@ -15,7 +15,7 @@
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 08:34:34 PST Thu Feb 2 2017
+! Last configuration change at 07:52:21 PST Fri Feb 3 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -90,6 +90,12 @@ domain iwan
 !
 !
 !
+crypto pki trustpoint TP-self-signed-1839524025
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1839524025
+ revocation-check none
+ rsakeypair TP-self-signed-1839524025
+!
 crypto pki trustpoint TP-self-signed-731151633
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-731151633
@@ -157,8 +163,9 @@ crypto pki trustpoint TP-self-signed-1713651336
  rsakeypair TP-self-signed-1713651336
 !
 !
-crypto pki certificate chain TP-self-signed-731151633
+crypto pki certificate chain TP-self-signed-1839524025
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-731151633
 crypto pki certificate chain TP-self-signed-782643678
 crypto pki certificate chain TP-self-signed-334359767
 crypto pki certificate chain TP-self-signed-238750749
@@ -178,7 +185,7 @@ crypto pki certificate chain TP-self-signed-1713651336
 !
 !
 !
-license udi pid CSR1000V sn 9191JV3JTCY
+license udi pid CSR1000V sn 9FGHVN6RGPQ
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -351,7 +358,7 @@ interface Tunnel10
  tunnel key 101
  tunnel vrf IWAN-TRANSPORT-1
  tunnel protection ipsec profile DMVPN-PROFILE-TRANSPORT-1
- domain iwan path MPLS
+ domain iwan path MPLS path-id 1
 !
 interface GigabitEthernet1
  description OOB Management
@@ -489,7 +496,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 08:34:33 PST Thu Feb 2 2017
+! Last configuration change at 07:58:29 PST Fri Feb 3 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -570,6 +577,12 @@ domain iwan
 !
 !
 !
+crypto pki trustpoint TP-self-signed-1372993907
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1372993907
+ revocation-check none
+ rsakeypair TP-self-signed-1372993907
+!
 crypto pki trustpoint TP-self-signed-3715352579
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-3715352579
@@ -637,8 +650,9 @@ crypto pki trustpoint TP-self-signed-1743038779
  rsakeypair TP-self-signed-1743038779
 !
 !
-crypto pki certificate chain TP-self-signed-3715352579
+crypto pki certificate chain TP-self-signed-1372993907
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-3715352579
 crypto pki certificate chain TP-self-signed-3392682215
 crypto pki certificate chain TP-self-signed-2132022894
 crypto pki certificate chain TP-self-signed-3208738598
@@ -658,7 +672,7 @@ crypto pki certificate chain TP-self-signed-1743038779
 !
 !
 !
-license udi pid CSR1000V sn 9NSEM6CP92M
+license udi pid CSR1000V sn 90TR8RIQOYC
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -831,7 +845,7 @@ interface Tunnel11
  tunnel key 102
  tunnel vrf IWAN-PUBLIC
  tunnel protection ipsec profile DMVPN-PROFILE-PUBLIC
- domain iwan path INET
+ domain iwan path INET path-id 2
 !
 interface GigabitEthernet1
  description OOB Management
@@ -962,7 +976,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 16:30:13 UTC Thu Feb 2 2017
+! Last configuration change at 14:10:36 UTC Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1137,7 +1151,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 16:30:01 UTC Thu Feb 2 2017
+! Last configuration change at 14:10:18 UTC Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1313,7 +1327,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 14:31:08 PST Thu Feb 2 2017
+! Last configuration change at 08:06:20 PST Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec localtime
@@ -1631,6 +1645,7 @@ ip ssh source-interface Loopback0
 !
 !
 ip prefix-list SITE-PREFIX seq 5 permit 10.3.128.0/24
+ip prefix-list SITE-PREFIX seq 10 permit 192.168.0.9/32
 no service-routing capabilities-manager
 logging trap debugging
 logging facility local3
@@ -1703,7 +1718,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 22:46:40 UTC Thu Feb 2 2017
+! Last configuration change at 16:16:31 UTC Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1953,6 +1968,10 @@ router eigrp as1
    no split-horizon
   exit-af-interface
   !
+  af-interface GigabitEthernet0/2
+   no passive-interface
+  exit-af-interface
+  !
   topology base
   exit-af-topology
   network 10.0.128.0 0.0.0.255
@@ -1973,6 +1992,8 @@ ip route vrf IWAN-TRANSPORT-1 0.0.0.0 0.0.0.0 10.0.0.6
 !
 !
 ip prefix-list SITE-PREFIX seq 5 permit 10.0.128.0/24
+ip prefix-list SITE-PREFIX seq 10 permit 192.168.0.25/32
+ip prefix-list SITE-PREFIX seq 15 permit 192.168.0.17/32
 no service-routing capabilities-manager
 !
 !
@@ -2035,8 +2056,6 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 23:20:00 UTC Thu Feb 2 2017
-!
 version 15.6
 service timestamps debug datetime msec
 service timestamps log datetime msec
@@ -2274,10 +2293,13 @@ router eigrp as1
    passive-interface
   exit-af-interface
   !
-  af-interface Tunnel11
-   no next-hop-self
+  af-interface GigabitEthernet0/2
    no passive-interface
-   no split-horizon
+  exit-af-interface
+  !
+  af-interface Tunnel11
+   no passive-interface
+   stub-site wan-interface
   exit-af-interface
   !
   topology base
@@ -2451,7 +2473,7 @@ write_files:
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 22:33:06 UTC Thu Feb 2 2017
+! Last configuration change at 16:21:46 UTC Fri Feb 3 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -2591,6 +2613,7 @@ no ip http secure-server
 !
 ip prefix-list ENTERPRISE-PREFIXES seq 5 permit 10.0.0.0/8
 ip prefix-list ENTERPRISE-PREFIXES seq 10 permit 172.16.1.0/24
+ip prefix-list ENTERPRISE-PREFIXES seq 15 permit 192.168.0.0/16
 !
 ip prefix-list HUB-PREFIXES seq 5 permit 10.2.0.0/24
 no service-routing capabilities-manager
