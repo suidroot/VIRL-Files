@@ -2821,13 +2821,16 @@ write_files:
         <interface id="0" name="eth1" ipv4="10.2.0.1" netPrefixLenV4="17"/>
     </node>
     <annotations>
-        <rect x="40" y="98" radius="10" width="271" height="235" fill="CCCCCC" stroke-width="3"/>
+        <rect x="40" y="26" radius="10" width="271" height="310" fill="CCCCCC" stroke-width="3"/>
         <rect x="442" y="26" radius="10" width="299" height="162" fill="CCCCCC" stroke-width="3"/>
         <rect x="441" y="194" radius="10" width="299" height="143" fill="CCCCCC" stroke-width="3"/>
-        <ellipse x="328" y="108" width="83" height="232" fill="CCCCCC" stroke-width="3"/>
+        <ellipse x="328" y="26" width="83" height="314" fill="CCCCCC" stroke-width="3"/>
         <text x="327" y="345" font-size="18">The Cloud</text>
         <text x="44" y="339" font-size="18">Hub Site</text>
         <text x="445" y="341" font-size="18">Branches</text>
+        <text x="48" y="33" font-size="18">10.2.0.0/17</text>
+        <text x="624" y="32" font-size="18">10.3.128.0/24</text>
+        <text x="623" y="312" font-size="18">10.0.128.0/24</text>
     </annotations>
     <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[2]"/>
     <connection dst="/virl:topology/virl:node[4]/virl:interface[1]" src="/virl:topology/virl:node[2]/virl:interface[2]"/>
