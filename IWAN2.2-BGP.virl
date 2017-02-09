@@ -15,7 +15,7 @@
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 13:44:24 PST Tue Feb 7 2017
+! Last configuration change at 14:18:21 PST Thu Feb 9 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -89,6 +89,12 @@ domain iwan
 !
 !
 !
+!
+crypto pki trustpoint TP-self-signed-732604191
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-732604191
+ revocation-check none
+ rsakeypair TP-self-signed-732604191
 !
 crypto pki trustpoint TP-self-signed-1108708697
  enrollment selfsigned
@@ -181,8 +187,9 @@ crypto pki trustpoint TP-self-signed-1713651336
  rsakeypair TP-self-signed-1713651336
 !
 !
-crypto pki certificate chain TP-self-signed-1108708697
+crypto pki certificate chain TP-self-signed-732604191
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-1108708697
 crypto pki certificate chain TP-self-signed-1701908573
 crypto pki certificate chain TP-self-signed-2052632659
 crypto pki certificate chain TP-self-signed-1839524025
@@ -206,7 +213,7 @@ crypto pki certificate chain TP-self-signed-1713651336
 !
 !
 !
-license udi pid CSR1000V sn 9B145OTOY18
+license udi pid CSR1000V sn 9074L30IVXI
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -372,6 +379,7 @@ interface Tunnel10
  ip nhrp map group RS-GROUP-10MBPS service-policy output RS-GROUP-10MBPS-POLICY
  ip nhrp map group RS-GROUP-4G service-policy output RS-GROUP-4G-POLICY
  ip nhrp network-id 101
+ ip nhrp redirect
  ip tcp adjust-mss 1360
  delay 1000
  tunnel source GigabitEthernet3
@@ -380,6 +388,8 @@ interface Tunnel10
  tunnel vrf IWAN-TRANSPORT-1
  tunnel protection ipsec profile DMVPN-PROFILE-TRANSPORT-1
  domain iwan path MPLS path-id 1
+ hold-queue 4096 in
+ hold-queue 4096 out
 !
 interface GigabitEthernet1
  description OOB Management
@@ -407,6 +417,8 @@ interface GigabitEthernet3
  cdp enable
  no mop enabled
  no mop sysid
+ hold-queue 4096 in
+ hold-queue 4096 out
 !
 !
 router eigrp IWAN-EIGRP
@@ -536,7 +548,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 13:44:26 PST Tue Feb 7 2017
+! Last configuration change at 14:13:27 PST Thu Feb 9 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -616,6 +628,12 @@ domain iwan
 !
 !
 !
+!
+crypto pki trustpoint TP-self-signed-936141381
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-936141381
+ revocation-check none
+ rsakeypair TP-self-signed-936141381
 !
 crypto pki trustpoint TP-self-signed-2844114605
  enrollment selfsigned
@@ -708,8 +726,9 @@ crypto pki trustpoint TP-self-signed-1743038779
  rsakeypair TP-self-signed-1743038779
 !
 !
-crypto pki certificate chain TP-self-signed-2844114605
+crypto pki certificate chain TP-self-signed-936141381
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-2844114605
 crypto pki certificate chain TP-self-signed-2294197755
 crypto pki certificate chain TP-self-signed-3198320583
 crypto pki certificate chain TP-self-signed-1372993907
@@ -733,7 +752,7 @@ crypto pki certificate chain TP-self-signed-1743038779
 !
 !
 !
-license udi pid CSR1000V sn 9XM1POY0GLI
+license udi pid CSR1000V sn 9J87ZUEMSTV
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -953,6 +972,7 @@ interface Tunnel11
  ip nhrp map group RS-GROUP-10MBPS service-policy output RS-GROUP-10MBPS-POLICY
  ip nhrp map group RS-GROUP-4G service-policy output RS-GROUP-4G-POLICY
  ip nhrp network-id 102
+ ip nhrp redirect
  ip tcp adjust-mss 1360
  delay 1400
  tunnel source GigabitEthernet3
@@ -961,6 +981,8 @@ interface Tunnel11
  tunnel vrf IWAN-PUBLIC
  tunnel protection ipsec profile DMVPN-PROFILE-PUBLIC
  domain iwan path INET path-id 2
+ hold-queue 4096 in
+ hold-queue 4096 out
 !
 interface GigabitEthernet1
  description OOB Management
@@ -987,6 +1009,8 @@ interface GigabitEthernet3
  cdp enable
  no mop enabled
  no mop sysid
+ hold-queue 4096 in
+ hold-queue 4096 out
 !
 router ospf 1
  redistribute connected subnets
@@ -1102,7 +1126,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 13:25:58 PST Tue Feb 7 2017
+! Last configuration change at 13:17:00 PST Thu Feb 9 2017
 !
 version 15.6
 service timestamps debug datetime msec localtime
@@ -1325,6 +1349,7 @@ interface Tunnel11
  ip nhrp shortcut
  ip tcp adjust-mss 1360
  delay 2000
+ no nhrp route-watch
  if-state nhrp
  tunnel source GigabitEthernet0/3
  tunnel mode gre multipoint
@@ -1492,7 +1517,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 21:26:10 UTC Tue Feb 7 2017
+! Last configuration change at 15:02:37 UTC Thu Feb 9 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1841,7 +1866,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 21:26:04 UTC Tue Feb 7 2017
+! Last configuration change at 15:02:30 UTC Thu Feb 9 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -2201,7 +2226,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 21:26:23 UTC Tue Feb 7 2017
+! Last configuration change at 21:17:36 UTC Thu Feb 9 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -2256,6 +2281,8 @@ domain iwan
    site-prefixes prefix-list HUB-PREFIXES
    password 7 121A0C041104
    load-balance
+   advanced
+    channel-unreachable-timer 4
    enterprise-prefix  prefix-list ENTERPRISE-PREFIXES
    class VOICE sequence 10
     match dscp ef policy voice
@@ -2538,7 +2565,7 @@ write_files:
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 21:26:23 UTC Tue Feb 7 2017
+! Last configuration change at 15:02:54 UTC Thu Feb 9 2017
 !
 version 15.6
 service timestamps debug datetime msec
