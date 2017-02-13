@@ -15,7 +15,7 @@
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 14:18:21 PST Thu Feb 9 2017
+! Last configuration change at 08:32:26 PST Mon Feb 13 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -89,6 +89,12 @@ domain iwan
 !
 !
 !
+!
+crypto pki trustpoint TP-self-signed-3336180746
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3336180746
+ revocation-check none
+ rsakeypair TP-self-signed-3336180746
 !
 crypto pki trustpoint TP-self-signed-732604191
  enrollment selfsigned
@@ -187,8 +193,9 @@ crypto pki trustpoint TP-self-signed-1713651336
  rsakeypair TP-self-signed-1713651336
 !
 !
-crypto pki certificate chain TP-self-signed-732604191
+crypto pki certificate chain TP-self-signed-3336180746
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-732604191
 crypto pki certificate chain TP-self-signed-1108708697
 crypto pki certificate chain TP-self-signed-1701908573
 crypto pki certificate chain TP-self-signed-2052632659
@@ -213,7 +220,7 @@ crypto pki certificate chain TP-self-signed-1713651336
 !
 !
 !
-license udi pid CSR1000V sn 9074L30IVXI
+license udi pid CSR1000V sn 9B1IN98ZGEW
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -548,7 +555,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 14:13:27 PST Thu Feb 9 2017
+! Last configuration change at 08:32:28 PST Mon Feb 13 2017
 !
 version 16.3
 service timestamps debug datetime msec localtime
@@ -628,6 +635,12 @@ domain iwan
 !
 !
 !
+!
+crypto pki trustpoint TP-self-signed-650237231
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-650237231
+ revocation-check none
+ rsakeypair TP-self-signed-650237231
 !
 crypto pki trustpoint TP-self-signed-936141381
  enrollment selfsigned
@@ -726,8 +739,9 @@ crypto pki trustpoint TP-self-signed-1743038779
  rsakeypair TP-self-signed-1743038779
 !
 !
-crypto pki certificate chain TP-self-signed-936141381
+crypto pki certificate chain TP-self-signed-650237231
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-936141381
 crypto pki certificate chain TP-self-signed-2844114605
 crypto pki certificate chain TP-self-signed-2294197755
 crypto pki certificate chain TP-self-signed-3198320583
@@ -752,7 +766,7 @@ crypto pki certificate chain TP-self-signed-1743038779
 !
 !
 !
-license udi pid CSR1000V sn 9J87ZUEMSTV
+license udi pid CSR1000V sn 9DOR66AZAAW
 license accept end user agreement
 license boot level ax
 diagnostic bootup level minimal
@@ -1126,7 +1140,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 13:17:00 PST Thu Feb 9 2017
+! Last configuration change at 08:27:26 PST Mon Feb 13 2017
 !
 version 15.6
 service timestamps debug datetime msec localtime
@@ -1517,7 +1531,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 15:02:37 UTC Thu Feb 9 2017
+! Last configuration change at 16:27:36 UTC Mon Feb 13 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -1866,7 +1880,7 @@ end</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 15:02:30 UTC Thu Feb 9 2017
+! Last configuration change at 16:27:27 UTC Mon Feb 13 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -2226,7 +2240,7 @@ end</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 21:17:36 UTC Thu Feb 9 2017
+! Last configuration change at 16:35:23 UTC Mon Feb 13 2017
 !
 version 15.6
 service timestamps debug datetime msec
@@ -2294,7 +2308,10 @@ domain iwan
     path-preference MPLS fallback INET 
    class CRITICAL-DATA sequence 30
     match dscp af21 policy low-latency-data
-    path-preference MPLS fallback INET 
+    path-preference INET fallback MPLS 
+   class TEST-TRAFFIC sequence 40
+    match dscp af43 policy best-effort
+    path-preference INET fallback MPLS 
    class DEFAULT sequence 100
     match dscp default policy scavenger
     path-preference INET fallback MPLS 
@@ -2565,7 +2582,7 @@ write_files:
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
             <entry key="config" type="String">!
-! Last configuration change at 15:02:54 UTC Thu Feb 9 2017
+! Last configuration change at 16:27:46 UTC Mon Feb 13 2017
 !
 version 15.6
 service timestamps debug datetime msec
